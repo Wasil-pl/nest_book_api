@@ -4,12 +4,14 @@ import {
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import * as cors from 'cors';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import cors from 'cors';
+import { AuthorsModule } from './authors/authors.module';
+import { BooksModule } from './books/books.module';
 
 @Module({
-  imports: [],
+  imports: [AuthorsModule, BooksModule],
   controllers: [AppController],
   providers: [AppService],
 })
