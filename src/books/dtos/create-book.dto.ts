@@ -29,5 +29,5 @@ export class CreateBookDTO {
   @IsNotEmpty()
   @IsUUID()
   @IsString()
-  author_id: string;
+  authorId: string;
 }

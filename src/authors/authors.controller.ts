@@ -59,9 +59,9 @@ export class AuthorsController {
   @UseGuards(JwtAuthGuard)
   public async delete(@Param('id', new ParseUUIDPipe()) id: Author['id']) {
     const author = await this.authorService.getAuthor(id);
-    if (!author) throw new NotFoundException(`Product with id ${id} not found`);
+    if (!author) throw new NotFoundException(`Author with id ${id} not found`);
 
     await this.authorService.delete(id);
-    return { message: 'Product deleted' };
+    return { message: 'Author deleted' };
   }
 }

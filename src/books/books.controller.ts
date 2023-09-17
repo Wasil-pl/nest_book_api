@@ -15,6 +15,7 @@ import { Book } from '@prisma/client';
 import { CreateBookDTO } from './dtos/create-book.dto';
 import { UpdateBookDTO } from './dtos/update-book.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
+import { LikeBookDto } from './dtos/like-book.dto';
 
 @Controller('books')
 export class BooksController {
@@ -37,6 +38,13 @@ export class BooksController {
   @UseGuards(JwtAuthGuard)
   public create(@Body() bookData: CreateBookDTO) {
     return this.bookService.create(bookData);
+  }
+
+  @Post('/like')
+  @UseGuards(JwtAuthGuard)
+  public async likeBook(@Body() likeData: LikeBookDto) {
+    await this.bookService.likeBook(likeData);
+    return { message: `Book liked` };
   }
 
   @Put('/:id')
