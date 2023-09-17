@@ -8,11 +8,13 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 import { Author } from '@prisma/client';
 import { CreateAuthorDTO } from './dtos/create-author.dto';
 import { UpdateAuthorDTO } from './dtos/update-author.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
 
 @Controller('authors')
 export class AuthorsController {
@@ -33,11 +35,13 @@ export class AuthorsController {
   }
 
   @Post('/')
+  @UseGuards(JwtAuthGuard)
   public create(@Body() authorData: CreateAuthorDTO) {
     return this.authorService.create(authorData);
   }
 
   @Put('/:id')
+  @UseGuards(JwtAuthGuard)
   async update(
     @Param('id', new ParseUUIDPipe()) id: Author['id'],
     @Body() authorData: UpdateAuthorDTO,
@@ -52,6 +56,7 @@ export class AuthorsController {
   }
 
   @Delete('/:id')
+  @UseGuards(JwtAuthGuard)
   public async delete(@Param('id', new ParseUUIDPipe()) id: Author['id']) {
     const author = await this.authorService.getAuthor(id);
     if (!author) throw new NotFoundException(`Product with id ${id} not found`);

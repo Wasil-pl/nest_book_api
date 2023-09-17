@@ -8,11 +8,13 @@ import {
   ParseUUIDPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { Book } from '@prisma/client';
 import { CreateBookDTO } from './dtos/create-book.dto';
 import { UpdateBookDTO } from './dtos/update-book.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth-guard';
 
 @Controller('books')
 export class BooksController {
@@ -32,11 +34,13 @@ export class BooksController {
   }
 
   @Post('/')
+  @UseGuards(JwtAuthGuard)
   public create(@Body() bookData: CreateBookDTO) {
     return this.bookService.create(bookData);
   }
 
   @Put('/:id')
+  @UseGuards(JwtAuthGuard)
   public async update(
     @Param('id', new ParseUUIDPipe()) id: Book['id'],
     @Body() bookData: UpdateBookDTO,
@@ -51,6 +55,7 @@ export class BooksController {
   }
 
   @Delete('/:id')
+  @UseGuards(JwtAuthGuard)
   public async delete(@Param('id', new ParseUUIDPipe()) id: Book['id']) {
     const book = await this.bookService.getBook(id);
     if (!book) throw new NotFoundException(`Book with id ${id} not found`);
