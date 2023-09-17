@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { Password, User } from '@prisma/client';
 import { PrismaService } from 'src/shared/services/prisma.service';
 
 @Injectable()
@@ -16,7 +16,9 @@ export class UsersService {
     });
   }
 
-  public getUserByEmail(email: User['email']): Promise<User | null> {
+  public getUserByEmail(
+    email: User['email'],
+  ): Promise<(User & { password: Password }) | null> {
     return this.prismaService.user.findUnique({
       where: { email },
       include: { password: true },
